@@ -1,0 +1,2 @@
+	"seqid"	"source"	"type"	"start"	"end"	"score"	"strand"	"phase"	"gene"	"annotation"
+"16"	"NC_026433.1"	"RefSeq"	"gene"	1	1701	"."	"+"	"."	"HA"	"Hemagglutinin"

@@ -1,0 +1,2 @@
+"seqid"	"source"	"type"	"start"	"end"	"score"	"strand"	"phase"	"gene"	"annotation"
+"2"	"NC_002204.1"	"RefSeq"	"gene"	21	2279	"."	"+"	"."	"PB1"	"RNA-directed RNA polymerase catalytic subunit"

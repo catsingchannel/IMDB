@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-multiselect/dist/vue-multiselect.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@vuepic/vue-datepicker@latest/dist/main.css">
+    <link rel="stylesheet" href="http://www.zhanglabtools.online/static/app/css/CSS.css">
+
+    <style>
+        body {
+            background-image: url('http://www.zhanglabtools.online/static/app/img/Gradient-20s-1920px.svg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body style=" width: 100%; min-height: 100%;">
+
+    <div id="main" style=" width: 100%; height: 100%; display: flex;">
+        <div id="sidebar" class="d-flex flex-column flex-shrink-0 float-left" style=" position: fixed; width: 4rem; height: 100%; overflow: auto; background: rgba(255, 255, 255, 0.5); z-index: 999;">
+            <ul id="sideMenu" class="nav nav-pills nav-flush flex-column mb-auto text-center">
+                <li id="sidehome" class="nav-item" @click="clickSideApp($event)" style="cursor:pointer;">
+                    <a class="nav-link py-3 border-bottom bg-primary" title="HOME">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-house" viewBox="0 0 16 16">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                        </svg>
+                    </a>
+                </li>
+                <li id="sideA1" class="nav-item" @click="clickSideApp($event)" style="cursor:pointer;">
+                    <a class="nav-link py-3 border-bottom" :class="{ active : activatingApp == 'appOne' }" title="Mutation Density">
+                        <img src="http://www.zhanglabtools.online/static/app/img/global.svg" width="24" height="24"/>
+                    </a>
+                </li>
+                <li id="sideA2" class="nav-item" @click="clickSideApp($event)" style="cursor:pointer;">
+                    <a class="nav-link py-3 border-bottom" :class="{ active : activatingApp == 'appTwo' }" title="Global Statistics">
+                        <img src="http://www.zhanglabtools.online/static/app/img/bars.svg" width="24" height="24"/>
+                    </a>
+                </li>
+                <li id="sideA3" class="nav-item" @click="clickSideApp($event)" title="Genome Mutation Profiles" style="cursor:pointer;">
+                    <a class="nav-link py-3 border-bottom" :class="{ active : activatingApp == 'appThree' }" title="Genome Mutation Profiles">
+                        <img src="http://www.zhanglabtools.online/static/app/img/nuc.svg" width="24" height="24"/>
+                    </a>
+                </li>
+                <li id="sideA4" class="nav-item" @click="clickSideApp($event)" title="Protein Mutation Profiles" style="cursor:pointer;">
+                    <a class="nav-link py-3 border-bottom" :class="{ active : activatingApp == 'appFour' }" title="Protein Mutation Profiles">
+                        <img src="http://www.zhanglabtools.online/static/app/img/protein.svg" width="30" height="30"/>
+                    </a>
+                </li>
+                <li id="sideA5" class="nav-item" @click="clickSideApp($event)" title="Mutation Intersections" style="cursor:pointer;">
+                    <a class="nav-link py-3 border-bottom" :class="{ active : activatingApp == 'appFive' }" title="Mutation Intersections">
+                        <img src="http://www.zhanglabtools.online/static/app/img/intersection.svg" width="26" height="26"/>
+                    </a>
+                </li>
+                <li id="sideA6" class="nav-item" @click="clickSideApp($event)" title="RT-PCR Assays Design" style="cursor:pointer;">
+                    <a class="nav-link py-3 border-bottom" :class="{ active : activatingApp == 'appSix' }" title="RT-PCR Assays Design">
+                        <img src="http://www.zhanglabtools.online/static/app/img/pcr.svg" width="32" height="32"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content" style=" margin-left: 4.7rem; margin-right: 0px; height:100%; width:100%">
+		    <div class="tab-pane show active" id="home" v-show="activatingApp === 'home'" role="tabpanel" aria-labelledby="home-tab">
+			    <div class="card" style="margin: 0 auto; background : rgba(255,255,255,0.6) ">
+                    <div class="card-header bg-primary">
+                           <h3 class="card-title text-light">"IMDB" : Infectious diseases pathogens' Mutation profile Database</h3>
+                    </div>
+				    <div class="card-body">
+                        <p>
+                            "IMDB" is an interactive web-based platform and set of analytic tools for effcient analysis of mutations among thousands of respiratory infectious diseases samples and providing in-silico applications based on mutation profiles such as automatical qPCR assays design;
+                        </p>
+                        <br>
+				    </div>
+			    </div>
+
+                <div class="row row-cols-1 row-cols-md-4 mb-3 justify-content-center" style="margin-left: 2%; margin-top: 1%;">
+					<div id="appOne" class="mx-2 my-2 px-0 card testani shadow" style="background : rgba(255,255,255,0.6); cursor:pointer; transition-duration:350ms;" @click="clickAppCard($event)" @mouseover="hoverIn($event)" @mouseleave="hoverOut()">
+                        <div class="card-header align-middle bg-light">
+                            <p class="fw-bold text-info" style="display:inline;">Mutation Density</p>
+                        </div>
+						<div class="card-body">
+                            <img src="http://www.zhanglabtools.online/static/app/img/a1p1.png" class="img-fluid"/>
+					    </div>
+                        <p class="card-text text-center">Genome distribution of mutations</p>
+				    </div>
+
+				    <div id="appTwo" class="mx-2 my-2 px-0 card testani shadow" style="background : rgba(255,255,255,0.6); cursor:pointer; transition-duration:350ms;" @click="clickAppCard($event)" @mouseover="hoverIn($event)" @mouseleave="hoverOut()">
+                        <div class="card-header align-middle bg-light">
+                            <p class="fw-bold text-info" style="display:inline;">Global Statistics</p>
+                        </div>
+						<div class="card-body d-flex justify-content-center">
+                            <img src="http://www.zhanglabtools.online/static/app/img/a2.png" class="img-fluid"/>
+					    </div>
+                        <p class="card-text text-center">Global statistics for mutations</p>
+				    </div>
+
+                    <div id="appThree" class="mx-2 my-2 px-0 card testani shadow" style="background : rgba(255,255,255,0.6); cursor:pointer; transition-duration:350ms;" @click="clickAppCard($event)" @mouseover="hoverIn($event)" @mouseleave="hoverOut()">
+                        <div class="card-header align-middle bg-light">
+                            <p class="fw-bold text-info" style="display:inline;">Genome Mutation Profiles</p>
+                        </div>
+						<div class="card-body d-flex justify-content-center">
+                            <img src="http://www.zhanglabtools.online/static/app/img/a3p2.png" class="img-fluid"/>
+					    </div>
+                        <p class="card-text text-center">Genome Mutation Profiles</p>
+				    </div>
+
+                    <div id="appFour" class="mx-2 my-2 px-0 card testani shadow" style="background : rgba(255,255,255,0.6); cursor:pointer; transition-duration:350ms;" @click="clickAppCard($event)" @mouseover="hoverIn($event)" @mouseleave="hoverOut()">
+                        <div class="card-header align-middle">
+                            <p class="fw-bold text-info" style="display:inline;">Protein Mutation Profiles</p>
+                        </div>
+						<div class="card-body d-flex justify-content-center">
+                            <img src="http://www.zhanglabtools.online/static/app/img/a4p1.png" class="img-fluid"/>
+					    </div>
+                        <p class="card-text text-center">Protein Mutation Profiles</p>
+				    </div>
+
+                    <div id="appFive" class="mx-2 my-2 px-0 card testani shadow" style="background : rgba(255,255,255,0.6); cursor:pointer;  transition-duration:350ms;" @click="clickAppCard($event)" @mouseover="hoverIn($event)" @mouseleave="hoverOut()">
+                        <div class="card-header align-middle bg-light">
+                            <p class="fw-bold text-info" style="display:inline;">Mutation Intersections</p>
+                        </div>
+						<div class="card-body d-flex justify-content-center">
+                            <img src="http://www.zhanglabtools.online/static/app/img/a5p1.png" class="img-fluid"/>
+					    </div>
+                        <p class="card-text text-center">Detection of co-occurring mutations</p>
+				    </div>
+
+                    <div id="appSix" class="mx-2 my-2 px-0 card testani shadow" style="background : rgba(255,255,255,0.6); cursor:pointer; transition-duration:350ms;" @click="clickAppCard($event)" @mouseover="hoverIn($event)" @mouseleave="hoverOut()">
+                        <div class="card-header align-middle bg-light">
+                            <p class="fw-bold text-info" style="display:inline;">RT-PCR assays design</p>
+                        </div>
+						<div class="card-body d-flex justify-content-center">
+                            <img src="http://www.zhanglabtools.online/static/app/img/a6.png" class="img-fluid"/>
+					    </div>
+                        <p class="card-text text-center">In silico qPCR assays design</p>
+				    </div>
+			    </div>
+
+		    </div>
+
+            <div class="tab-pane fade show active float-left" id="appOneContainer" v-show="activatingApp === 'appOne'" role="tabpanel" aria-labelledby="appone-tab">
+                <div class="card" style="margin: 0 auto; background : rgba(255,255,255,0.6); ">
+				    <div class="card-header d-flex align-items-center bg-primary">
+				        <h3 class="me-auto card-title text-light">Mutation Density</h3>
+                        <div class="text-white" style="width:7%; height:40%">
+                            <button @click="exitApp" class="bg-transparent text-white fs-5" style="border:none;" :style="{ 'opacity': exitHover }" @mouseover="exitIn()" @mouseleave="exitOut()">
+                                EXIT
+                                <i class="bi bi-x-lg" fill="white"></i>
+                            </button>
+                        </div>
+				    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="d-flex justify-content-center">
+                                    <div id="a1p1"></div>
+                                </div>
+                            </div>
+                            <div class="col-3 bg-light">
+                                <h4 class="fw-bold">Mutation Distribution</h4>
+                                <p class="card-text text-start">
+                                    Here you can change the number of locations (Top locations with the most recorded samples) to present the mutation density profile. Also, you can choose a range of genomic sites to investigate specific mutation hotspots. e.g. 28831:28931 in SARS-CoV-2 genome. 
+                                </p>
+                                <hr class="bg-black border-2 border-top border-black" />
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="speciesSelect" class="form-select form-control" v-model="currentSpecies" @change="getSegmentList">
+                                        <option v-for="it in speciesList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="speciesSelect">Select virus species:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating" v-show="segment" @change="segmentChange">
+                                    <select id="segmentSelect" class="form-select" v-model="currentSegment">
+                                        <option v-for="it in segmentList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="segmentSelect">Select virus genome segment:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="lineageSelect" class="form-select" v-model="currentLineage">
+                                        <option v-for="it in lineageList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="lineageSelect">Select sample lineage:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="locateSelect" class="form-select" v-model="currentLocate">
+                                        <option v-for="it in locateList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="locateSelect">Select sample geographic location:</label>
+                                </div>
+                                <br />
+                                <div>
+                                    <label for="datePicker">Select sample colleted date range:</label>
+                                    <DatePicker id="datePicker" v-model="date" range :multi-calendars="{ solo: true }" :enable-time-picker="false"/>
+                                </div>
+                                <br />
+                                <span>genome region start: {{genomeLeft}}</span>
+                                <div>
+                                    <input type="range" id="genomeRange1" min="0" :max="genomeRight" step="1" v-model="genomeLeft">
+                                </div>
+                                <span>genome region end: {{genomeRight}}</span>
+                                <div>
+                                    <input type="range" id="genomeRange2" :min="genomeLeft" :max="genomeMax" step="1" v-model="genomeRight">
+                                </div>
+                                <br />
+                                <div @click="clickSubmit">
+                                    <button type="button" class="btn btn-primary" style="float: right;">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+                                        {{ buttonLabel }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+            </div>
+
+            <div class="tab-pane fade show active float-left" id="appTwoContainer" v-show="activatingApp === 'appTwo'" role="tabpanel" aria-labelledby="apptwo-tab">
+                <div class="card" style="margin: 0 auto; background : rgba(255,255,255,0.6);">
+				    <div class="card-header d-flex bg-primary">
+				        <h4 class="me-auto card-title text-light">Global Statistics</h4>
+                        <div class="text-white" style="width:7%; height:40%">
+                            <button @click="exitApp" class="bg-transparent text-white fs-5" style="border:none;" :style="{ 'opacity': exitHover }" @mouseover="exitIn()" @mouseleave="exitOut()">
+                                EXIT
+                                <i class="bi bi-x-lg" fill="white"></i>
+                            </button>
+                        </div>
+				    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="row row-cols-2">
+                                    <div class="col">
+                                        <div class="card atwoani" style="background : rgba(255,255,255,0);">
+                                            <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                                <h5 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Average mutations per sample</h5>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div id="a2p1"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card atwoani" style="background : rgba(255,255,255,0);">
+                                            <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                                <h5 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Counts of different mutation classes</h5>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div id="a2p2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card atwoani" style="background : rgba(255,255,255,0);">
+                                            <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                                <h5 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Counts of different mutation types</h5>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div id="a2p3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card atwoani" style="background : rgba(255,255,255,0);">
+                                            <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                                <h5 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Barplot of nucleotide variants</h5>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div id="a2p4"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card atwoani" style="background : rgba(255,255,255,0);">
+                                            <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                                <h5 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Barplot of protein mutations</h5>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div id="a2p5"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 bg-light">
+                                <h4 class="fw-bold">Basic descriptions for the mutational events</h4>
+                                <p class="card-text text-start">
+                                    In this section, we displayed some mutation properties of virus genome, including average mutations per sample, counts of different mutation classes, counts of different mutation types, barplot of different nucleotide variants, and barplot of protein mutations, based on annotation of all mutations from the recorded samples we collected.
+                                </p>
+                                <hr class="bg-black border-2 border-top border-black" />
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="speciesSelect" class="form-select form-control" v-model="currentSpecies" @change="getSegmentList">
+                                        <option v-for="it in speciesList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="speciesSelect">Select virus species:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating" v-show="segment">
+                                    <select id="segmentSelect" class="form-select" v-model="currentSegment">
+                                        <option v-for="it in segmentList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="segmentSelect">Select virus genome segment:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="lineageSelect" class="form-select" v-model="currentLineage">
+                                        <option v-for="it in lineageList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="lineageSelect">Select sample lineage:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="locateSelect" class="form-select" v-model="currentLocate">
+                                        <option v-for="it in locateList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="locateSelect">Select sample geographic location:</label>
+                                </div>
+                                <div>
+                                    <label for="datePicker">Select sample colleted date range:</label>
+                                    <DatePicker id="datePicker" v-model="date" range :multi-calendars="{ solo: true }" :enable-time-picker="false"/>
+                                </div>
+                                <br>
+                                <div @click="clickSubmit">
+                                    <button type="button" class="btn btn-primary" style="float: right;">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+                                        {{ buttonLabel }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+            </div>
+
+            <div class="tab-pane fade show active float-left" id="appThreeContainer" v-show="activatingApp === 'appThree'" role="tabpanel" aria-labelledby="appthree-tab">
+                <div class="card" style="margin: 0 auto; background : rgba(255,255,255,0.6);">
+				    <div class="card-header d-flex bg-primary">
+				        <h4 class="me-auto card-title text-light">Genome Mutations Profile</h4>
+                        <div class="text-white" style="width:7%; height:40%">
+                            <button @click="exitApp" class="bg-transparent text-white fs-5" style="border:none;" :style="{ 'opacity': exitHover }" @mouseover="exitIn()" @mouseleave="exitOut()">
+                                EXIT
+                                <i class="bi bi-x-lg" fill="white"></i>
+                            </button>
+                        </div>
+				    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="row">
+                                    <div class="card" style="background : rgba(255,255,255,0);">
+                                        <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                            <h4 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Mutation counts for selected gene</h4>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div id="a3p1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card" style="background : rgba(255,255,255,0);">
+                                        <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                            <h4 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Plot nucleotide mutation profile</h4>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div id="a3p2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card" style="background : rgba(255,255,255,0);">
+                                        <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                            <h4 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Average mutation counts per base in genes</h4>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div id="a3p3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 bg-light">
+                                <h4 class="fw-bold">Genome Mutation Profile</h4>
+                                <p class="card-text text-start">
+                                    In this section, we generated a mutation profile of virus genome. In this profile, we investigated mutation counts in selected gene or genome regions, as some genome regions are more susceptible to mutations. These mutations may impact virus' infectivity and evolution. Users could change the location and number of top mutations in the control panel.
+                                </p>
+                                <p class="text-success" style="font-size: 12px;">
+                                    Tips: Put mouse cursor over the sactter in scatter plot will show details such as mutation type, position and occurrence. 
+                                </p>
+                                <hr class="bg-black border-2 border-top border-black" />
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="speciesSelect" class="form-select form-control" v-model="currentSpecies" @change="getSegmentList">
+                                        <option v-for="it in speciesList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="speciesSelect">Select virus species:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="lineageSelect" class="form-select" v-model="currentLineage">
+                                        <option v-for="it in lineageList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="lineageSelect">Select sample lineage:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="locateSelect" class="form-select" v-model="currentLocate">
+                                        <option v-for="it in locateList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="locateSelect">Select sample geographic location:</label>
+                                </div>
+                                <div v-if="!geneCheck" class="input-group mb-3 form-floating">
+                                    <select id="proteinSelect" class="form-select" v-model="currentProtein">
+                                        <option v-for="it in proteinList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="proteinSelect">Select gene:</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="gCustom" v-model="geneCheck">
+                                        <label class="form-check-label" for="gCustom">
+                                            Select custom genome range?
+                                        </label>
+                                    </div>
+                                <div v-if="geneCheck">
+                                    <div class="input-group mb-3 form-floating" v-show="(segment && geneCheck)" @change="segmentChange">
+                                            <select id="segmentSelect" class="form-select" v-model="currentSegment">
+                                                <option v-for="it in segmentList" :value="it">{{ it }}</option>
+                                            </select>
+                                            <label for="segmentSelect">Select virus genome segment:</label>
+                                    </div>
+                                    <span>genome region start: {{genomeLeft}}</span>
+                                    <div>
+                                        <input type="range" id="genomeRange1" min="0" :max="genomeRight" step="1" v-model="genomeLeft">
+                                    </div>
+                                    <span>genome region end: {{genomeRight}}</span>
+                                    <div>
+                                        <input type="range" id="genomeRange2" :min="genomeLeft" :max="genomeMax" step="1" v-model="genomeRight">
+                                    </div>
+                                </div>
+                                <span>select mutation type numbers: {{mtypeNum}}</span>
+                                <div>
+                                    <input type="range" id="mtNum" :min="0" :max="25" step="1" v-model="mtypeNum">
+                                </div>
+                                <br/>
+                                <div>
+                                    <label for="datePicker">Select sample colleted date range:</label>
+                                    <DatePicker id="datePicker" v-model="date" range :multi-calendars="{ solo: true }" :enable-time-picker="false"/>
+                                </div>
+                                <br>
+                                <div @click="clickSubmit">
+                                    <button type="button" class="btn btn-primary" style="float: right;">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+                                        {{ buttonLabel }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+            </div>
+
+            <div class="tab-pane fade show active float-left" id="appFourContainer" v-show="activatingApp === 'appFour'" role="tabpanel" aria-labelledby="appfour-tab">
+                <div class="card" style="margin: 0 auto; background : rgba(255,255,255,0.6);">
+				    <div class="card-header d-flex bg-primary">
+				        <h4 class="me-auto card-title text-light">Protein Mutations Profile</h4>
+                        <div class="text-white" style="width:7%; height:40%">
+                            <button @click="exitApp" class="bg-transparent text-white fs-5" style="border:none;" :style="{ 'opacity': exitHover }" @mouseover="exitIn()" @mouseleave="exitOut()">
+                                EXIT
+                                <i class="bi bi-x-lg" fill="white"></i>
+                            </button>
+                        </div>
+				    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="row">
+                                    <div class="card" style="background : rgba(255,255,255,0);">
+                                        <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                            <h4 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Mutation counts for selected protein</h4>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div id="a4p1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card" style="background : rgba(255,255,255,0);">
+                                        <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                            <h4 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Plot protein mutation profile</h4>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div id="a4p2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 bg-light">
+                                <h4 class="fw-bold">Protein Mutation Profile</h4>
+                                <p class="card-text text-start">
+                                    This profile is for the top mutated events occurred in proteins encoded by virus genome. These events may be considered as potential targets for clinical therapy, as some mutations are critical for virus infection and transmission. (e.g. D614G for SARS-CoV-2).
+                                </p>
+                                <p class="text-success" style="font-size: 12px;">
+                                    Tips: Put mouse cursor over the sactter in scatter plot will show details such as mutation type, position and occurrence. 
+                                </p>
+                                <hr class="bg-black border-2 border-top border-black" />
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="speciesSelect" class="form-select form-control" v-model="currentSpecies" @change="getSegmentList">
+                                        <option v-for="it in speciesList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="speciesSelect">Select virus species:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="lineageSelect" class="form-select" v-model="currentLineage">
+                                        <option v-for="it in lineageList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="lineageSelect">Select sample lineage:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="locateSelect" class="form-select" v-model="currentLocate">
+                                        <option v-for="it in locateList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="locateSelect">Select sample geographic location:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="proteinSelect" class="form-select" v-model="currentProtein">
+                                        <option v-for="it in proteinList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="proteinSelect">Select protein:</label>
+                                </div>
+                                <br/>
+                                <span>select protein mutation type numbers: {{ptypeNum}}</span>
+                                <div>
+                                    <input type="range" id="ptNum" :min="0" :max="50" step="1" v-model="ptypeNum">
+                                </div>
+                                <br/>
+                                <div>
+                                    <label for="datePicker">Select sample colleted date range:</label>
+                                    <DatePicker id="datePicker" v-model="date" range :multi-calendars="{ solo: true }" :enable-time-picker="false"/>
+                                </div>
+                                <br>
+                                <div @click="clickSubmit">
+                                    <button type="button" class="btn btn-primary" style="float: right;">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+                                        {{ buttonLabel }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+            </div>
+
+            <div class="tab-pane fade show active float-left" id="appFiveContainer" v-show="activatingApp === 'appFive'" role="tabpanel" aria-labelledby="appfive-tab">
+                <div class="card" style="margin: 0 auto; background : rgba(255,255,255,0.6);">
+				    <div class="card-header d-flex bg-primary">
+				        <h4 class="me-auto card-title text-light">Intersection for mutations</h4>
+                        <div class="text-white" style="width:7%; height:40%">
+                            <button @click="exitApp" class="bg-transparent text-white fs-5" style="border:none;" :style="{ 'opacity': exitHover }" @mouseover="exitIn()" @mouseleave="exitOut()">
+                                EXIT
+                                <i class="bi bi-x-lg" fill="white"></i>
+                            </button>
+                        </div>
+				    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="row">
+                                    <div class="card" style="background : rgba(255,255,255,0);">
+                                        <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                            <h4 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Mutation tracking for selected protein</h4>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div id="a5p1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card" style="background : rgba(255,255,255,0);">
+                                        <div class="card-header bg-gradient" style="display:table; background : rgba(255,108,95,1);">
+                                            <h4 class="me-auto card-title text-light" style="display:table-cell; vertical-align:middle;">Venn plot for custom mutation combination</h4>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div id="a5p2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 bg-light">
+                                <h4 class="fw-bold">UpsetR plot for proteins</h4>
+                                <p class="card-text text-start">
+                                    In this panel, Mutation combinations in selected gene of virus with top protein mutations which have the most recorded samples are displayed in the form of UpsetR plot. Users can select date range, geographic locations or lineage of interest to monitor the distribution of these mutation combinations.
+                                </p>
+                                <hr class="bg-black border-2 border-top border-black" />
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="speciesSelect" class="form-select form-control" v-model="currentSpecies" @change="getSegmentList">
+                                        <option v-for="it in speciesList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="speciesSelect">Select virus species:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="lineageSelect" class="form-select" v-model="currentLineage">
+                                        <option v-for="it in lineageList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="lineageSelect">Select sample lineage:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="locateSelect" class="form-select" v-model="currentLocate">
+                                        <option v-for="it in locateList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="locateSelect">Select sample geographic location:</label>
+                                </div>
+                                <div class="input-group mb-3 form-floating">
+                                    <select id="proteinSelect" class="form-select" v-model="currentProtein">
+                                        <option v-for="it in proteinList" :value="it">{{ it }}</option>
+                                    </select>
+                                    <label for="proteinSelect">Select protein:</label>
+                                </div>
+                                <span>select mutation combinations to present: {{ctypeNum}}</span>
+                                <div>
+                                    <input type="range" id="ctNum" :min="0" :max="25" step="1" v-model="ctypeNum">
+                                </div>
+                                <br/>
+                                <div>
+                                    <label for="datePicker">Select sample colleted date range:</label>
+                                    <DatePicker id="datePicker" v-model="date" range :multi-calendars="{ solo: true }" :enable-time-picker="false"/>
+                                </div>
+                                <br/>
+                                <div class="mb-3">
+                                    <label for="mutstext" class="form-label">Input any interest nucleotides or protein mutations</label>
+                                    <textarea class="form-control" id="mutstext" rows="3" placeholder="e.g.: S:D614G,28881:GGG->AAC" v-model="mutationText"></textarea>
+                                </div>
+                                <br/>
+                                <div @click="clickSubmit">
+                                    <button type="button" class="btn btn-primary" style="float: right;">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+                                        {{ buttonLabel }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+            </div>
+
+            <div class="tab-pane fade show active float-left" style="width:95%"  id="appSixContainer"  v-show="activatingApp === 'appSix'" role="tabpanel" aria-labelledby="appone-tab">
+                <div class="card" style="margin: 0 auto; background : rgba(255,255,255,0.6);">
+				    <div class="card-header d-flex bg-primary align-items-center">
+				        <h4 class="me-auto card-title text-light">qPCR assay design</h4>
+                        <div class="text-white" style="width:7%; height:40%">
+                            <button @click="exitApp" class="bg-transparent text-white fs-5" style="border:none;" :style="{ 'opacity': exitHover }" @mouseover="exitIn()" @mouseleave="exitOut()">
+                                EXIT
+                                <i class="bi bi-x-lg" fill="white"></i>
+                            </button>
+                        </div>
+				    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="row bg-light">
+                                    <h4 class="fw-bold">Automatical RT-PCR assays design based on mutation profile</h4>
+                                    <p class="card-text text-start">
+                                        In this panel, We use MOPSO algorithm and our mutation profile to automaically design qPCR assays for target virus. Users can select target gene or region in genome, and set custom primer and probe parameters in control panel of right side.
+                                    </p>
+                                    <hr class="bg-black border-2 border-top border-black" />
+                                </div>
+                                <div class="row">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="seqCustom" v-model="seqCheck">
+                                        <label class="form-check-label" for="seqCustom">
+                                            Using custom sequence and mutation profiles?
+                                        </label>
+                                    </div>
+                                    <div class="mb-3" v-if="seqCheck">
+                                        <label for="seqInput" class="form-label">Input your nucleotide sequence for assay design</label>
+                                        <textarea class="form-control" id="seqInput" rows="8" v-model="pcrTemplate"></textarea>
+                                    </div>
+                                    <div v-if="!seqCheck">
+                                        <div class="input-group mb-3 form-floating">
+                                            <select id="speciesSelect" class="form-select form-control" v-model="currentSpecies" @change="getSegmentList">
+                                                <option v-for="it in speciesList" :value="it">{{ it }}</option>
+                                            </select>
+                                            <label for="speciesSelect">Select virus species:</label>
+                                        </div>
+                                        <div class="input-group mb-3 form-floating" v-show="(segment && rangeCheck)" @change="segmentChange">
+                                            <select id="segmentSelect" class="form-select" v-model="currentSegment">
+                                                <option v-for="it in segmentList" :value="it">{{ it }}</option>
+                                            </select>
+                                            <label for="segmentSelect">Select virus genome segment:</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="rangeCustom" v-model="rangeCheck">
+                                            <label class="form-check-label" for="rangeCustom">
+                                                Using custom genome range?
+                                            </label>
+                                        </div>
+                                        <div class="input-group mb-3 form-floating" v-if="!rangeCheck">
+                                            <select id="proteinSelect" class="form-select" v-model="currentProtein">
+                                                <option v-for="it in proteinList" :value="it">{{ it }}</option>
+                                            </select>
+                                            <label for="proteinSelect">Select protein:</label>
+                                        </div>
+                                        <span v-if="rangeCheck">genome region start: {{genomeLeft}}</span>
+                                        <div v-if="rangeCheck">
+                                            <input type="range" id="genomeRange1" min="0" :max="genomeRight" step="1" v-model="genomeLeft">
+                                        </div>
+                                        <span v-if="rangeCheck">genome region end: {{genomeRight}}</span>
+                                        <div v-if="rangeCheck">
+                                            <input type="range" id="genomeRange2" :min="genomeLeft" :max="genomeMax" step="1" v-model="genomeRight">
+                                        </div>
+                                    </div>
+                                    <div class="row row-cols-3">
+                                        <div class="form-floating mb-3 col">
+                                            <select id="lineageSelect" class="form-select" v-model="currentLineage">
+                                                <option v-for="it in lineageList" :value="it">{{ it }}</option>
+                                            </select>
+                                            <label for="lineageSelect">Select sample lineage:</label>
+                                        </div>
+                                        <div class="form-floating mb-3 col">
+                                            <select id="locateSelect" class="form-select" v-model="currentLocate">
+                                                <option v-for="it in locateList" :value="it">{{ it }}</option>
+                                            </select>
+                                            <label for="locateSelect">Select sample geographic location:</label>
+                                        </div>
+                                        <div class="mb-3 col">
+                                            <label for="datePicker">Select sample colleted date range:</label>
+                                            <DatePicker id="datePicker" v-model="date" range :multi-calendars="{ solo: true }" :enable-time-picker="false"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div>
+                                        <button @click="clickSubmit" type="button" class="btn btn-primary" style="float: right;">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="loading"></span>
+                                            {{ buttonLabel }}
+                                        </button>
+                                        <button @click="downloadAssays" type="button" class="btn btn-primary" style="float: right; margin-right: 2%">
+                                            Download
+                                            <i class="bi bi-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr class="bg-black border-2 border-top border-black" />
+                                <br />
+                                <div class="row">
+                                    <div class="card">
+                                        <p-datatable :value="assays" paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]" scrollable scrollHeight="800px" tableStyle="min-width: 50rem">
+                                            <p-column field="id" header="#" style="width: 25%"></p-column>
+                                            <p-column field="start" header="Start" sortable></p-column>
+                                            <p-column field="length" header="Length" sortable></p-column>
+                                            <p-column field="coverage" header="Coverage" sortable></p-column>
+                                            <p-column field="forward_start" header="Forward_Start" sortable></p-column>
+                                            <p-column field="forward_length" header="Forward_Length" sortable></p-column>
+                                            <p-column field="forward_seq" header="Forward_Sequence" sortable></p-column>
+                                            <p-column field="forward_tm" header="Forward_Tm" sortable></p-column>
+                                            <p-column field="forward_gc" header="Forward_GC" sortable></p-column>
+                                            <p-column field="forward_deltaG" header="Forward_DeltaG" sortable></p-column>
+                                            <p-column field="forward_dimer" header="Forward_Dimer" sortable></p-column>
+                                            <p-column field="forward_hairpin" header="Forward_Haripin" sortable></p-column>
+                                            <p-column field="reverse_start" header="Reverse_Start" sortable></p-column>
+                                            <p-column field="reverse_length" header="Reverse_Length" sortable></p-column>
+                                            <p-column field="reverse_seq" header="Reverse_Sequence" sortable></p-column>
+                                            <p-column field="reverse_tm" header="Reverse_Tm" sortable></p-column>
+                                            <p-column field="reverse_gc" header="Reverse_GC" sortable></p-column>
+                                            <p-column field="reverse_deltaG" header="Reverse_DeltaG" sortable></p-column>
+                                            <p-column field="reverse_dimer" header="Reverse_Dimer" sortable></p-column>
+                                            <p-column field="reverse_hairpin" header="Reverse_Hairpin" sortable></p-column>
+                                            <p-column field="tm_difference" header="Tm_Difference" sortable></p-column>
+                                            <p-column field="gc_difference" header="GC_Difference" sortable></p-column>
+                                            <p-column field="cross_dimer" header="Cross_Dimer" sortable></p-column>
+                                            <p-column field="probe_start" header="Probe_Start" sortable></p-column>
+                                            <p-column field="probe_length" header="Probe_Length" sortable></p-column>
+                                            <p-column field="probe_seq" header="Probe_Sequence" sortable></p-column>
+                                            <p-column field="probe_tm" header="Probe_Tm" sortable></p-column>
+                                            <p-column field="probe_gc" header="Probe_GC" sortable></p-column>
+                                            <p-column field="probe_deltaG" header="Probe_DeltaG" sortable></p-column>
+                                        </p-datatable>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 bg-light">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="program-tab" data-bs-toggle="tab" data-bs-target="#program" type="button" role="tab" aria-controls="program" aria-selected="false">Program</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="primer-tab" data-bs-toggle="tab" data-bs-target="#primer" type="button" role="tab" aria-controls="primer" aria-selected="true">Primer</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="probe-tab" data-bs-toggle="tab" data-bs-target="#probe" type="button" role="tab" aria-controls="probe" aria-selected="false">Probe</button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade" id="program" role="tabpanel" aria-labelledby="program-tab">
+                                        <div class="mb-3">
+                                            <label for="pnum" class="form-label">Particle number</label>
+                                            <input type="number" class="form-control" id="pnum" value="16" v-model="pnum">
+                                        </div>
+                                        <div id="pnWarn" class="form-text text-danger">
+                                            Increasing this parameter will significantly increase running time!
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="inum" class="form-label">Iterattion number</label>
+                                            <input type="number" class="form-control" id="inum" value="500" v-model="inum">
+                                        </div>
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="phi1" class="form-label">Phi 1</label>
+                                                <input type="number" class="form-control" id="phi1" value="2.0" step="0.1" v-model="phi1">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="phi2" class="form-label">Phi 2</label>
+                                                <input type="number" class="form-control" id="phi2" value="2.0" step="0.1" v-model="phi2">
+                                            </div>
+                                            <div id="phiWarn" class="form-text text-danger">
+                                                The sum of phi1 and phi2 should greater than or equal to 4!
+                                            </div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="rerunCustom" v-model="reRun">
+                                        <label class="form-check-label" for="rerunCustom">
+                                            Rerun without clear the previous assays? 
+                                        </label>
+                                    </div>
+                                    </div>
+                                    <div class="tab-pane fade show active" id="primer" role="tabpanel" aria-labelledby="primer-tab">
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="primerMaxT" class="form-label">Max Tm(℃)</label>
+                                                <input type="number" class="form-control" id="primerMaxT" value="70" v-model="primerMaxT">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerMinT" class="form-label">Min Tm(℃)</label>
+                                                <input type="number" class="form-control" id="primerMinT" value="50" v-model="primerMinT">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerTDiff" class="form-label">Max Tm Difference(℃)</label>
+                                                <input type="number" class="form-control" id="primerTDiff" value="5" v-model="primerTDiff">
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="primerMaxGC" class="form-label">Max GC Content(%)</label>
+                                                <input type="number" class="form-control" id="primerMaxGC" value="60" v-model="primerMaxGC">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerMinGC" class="form-label">Min GC Content(%)</label>
+                                                <input type="number" class="form-control" id="primerMinGC" value="40" v-model="primerMinGC">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerGCDiff" class="form-label">Max GC Difference(%)</label>
+                                                <input type="number" class="form-control" id="primerGCDiff" value="5" v-model="primerGCDiff">
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="primerMaxP" class="form-label">Max Product Length(nt)</label>
+                                                <input type="number" class="form-control" id="primerMaxP" value="150" v-model="primerMaxP">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerMinP" class="form-label">Min Product Length(nt)</label>
+                                                <input type="number" class="form-control" id="primerMinP" value="90" v-model="primerMinP">
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="primerMaxL" class="form-label">Max Primer Length(nt)</label>
+                                                <input type="number" class="form-control" id="primerMaxL" value="22" v-model="primerMaxL">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerMinL" class="form-label">Min Primer Length(nt)</label>
+                                                <input type="number" class="form-control" id="primerMinL" value="18" v-model="primerMinL">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerLDiff" class="form-label">Max Primer Length Difference(nt)</label>
+                                                <input type="number" class="form-control" id="primerLDiff" value="5" v-model="primerLDiff">
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="temparature" class="form-label">Temparature (℃)</label>
+                                                <input type="number" class="form-control" id="temparature" value="37.0" step="0.1" v-model="temparature">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="primerConc" class="form-label">Primer Concentration (nmol/L)</label>
+                                                <input type="number" class="form-control" id="primerConc" value="250" v-model="primerConc">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="naConc" class="form-label">Na+ Concentration (M)</label>
+                                                <input type="number" class="form-control" id="naConc" value="0.05" step="0.001" v-model="naConc">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="probe" role="tabpanel" aria-labelledby="probe-tab">
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="probeMaxT" class="form-label">Max Tm(℃)</label>
+                                                <input type="number" class="form-control" id="probeMaxT" value="65" v-model="probeMaxT">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="probeMinT" class="form-label">Min Tm(℃)</label>
+                                                <input type="number" class="form-control" id="probeMinT" value="55" v-model="probeMinT">
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="probeMaxGC" class="form-label">Max GC Content(%)</label>
+                                                <input type="number" class="form-control" id="probeMaxGC" value="60" v-model="probeMaxGC">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="probeMinGC" class="form-label">Min GC Content(%)</label>
+                                                <input type="number" class="form-control" id="probeMinGC" value="40" v-model="probeMinGC">
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-2">
+                                            <div class="mb-3 col">
+                                                <label for="probeMaxL" class="form-label">Max Probe Length(nt)</label>
+                                                <input type="number" class="form-control" id="probeMaxL" value="22" v-model="probeMaxL">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="probeMinL" class="form-label">Min Probe Length(nt)</label>
+                                                <input type="number" class="form-control" id="probeMinL" value="18" v-model="probeMinL">
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label for="probeConc" class="form-label">Probe Concentration (nmol/L)</label>
+                                                <input type="number" class="form-control" id="probeConc" value="250" v-model="probeConc">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			    </div>
+            </div>
+	    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/primevue@4.0.0-rc.2/umd/primevue.min.js"></script>
+    <script src="https://unpkg.com/@primevue/themes@4.0.0-rc.2/umd/aura.min.js"></script>
+    <script src="https://unpkg.com/@vuepic/vue-datepicker@latest"></script>
+    <script src="https://unpkg.com/vue-multiselect"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://unpkg.com/browse/venn.js@0.2.20/build/venn.min.js"></script>
+    <script src="https://unpkg.com/browse/pdfkit@0.15.0/js/pdfkit.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/blob-stream@0.1.3/.js"></script>
+   
+    <script type="module" src="http://www.zhanglabtools.online/static/app/js/JavaScript.js"></script>
+</body>
+</html>

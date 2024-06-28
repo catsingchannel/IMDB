@@ -1,0 +1,117 @@
+#sidebarButton {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    top: 4px;
+    left: 0px;
+    right: auto;
+    z-index: 999;
+    background-color: rgb(242, 242, 242);
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 5px 1px;
+    cursor: pointer;
+    padding: 0px;
+    transition: top 0.3s ease-out 0s, left 0.3s ease-out 0s, width 0.3s ease-out 0s, height 0.3s ease-out 0s;
+    border-radius: 0px 6px 6px 0px;
+    text-align: center;
+}
+
+.rotate-90 {
+    filter: progid: DXImageTransform.Microsoft.BasicImage(rotation=0.5);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.col > a:link {
+    text-decoration: none;
+    color: black;
+}
+
+.col > a:active {
+    text-decoration: none;
+    color: black;
+}
+
+.col > a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.col > a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.combination circle {
+    fill: #e0e0e0;
+}
+
+.combination circle.member {
+    fill: black;
+}
+
+.combination .connector {
+    stroke: black;
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    z-index: 20;
+}
+
+.testani {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+    .testani:hover {
+        border-width: 4px;
+        border-image: linear-gradient(#ffcf81, #fdffab) 20;
+        transform: scale(1.06) translate3d( 0, 0, 0) perspective(1px);
+    }
+
+        .testani:hover p {
+            transform: scale(0.95) translate3d( 0, 0, 0) perspective(1px);
+        }
+
+.atwoani {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+    .atwoani:hover {
+        border-width: 4px;
+        border-image: linear-gradient(#2dde98, #1cc7d0) 20;
+        transform: scale(1.06) translate3d( 0, 0, 0) perspective(1px);
+    }
+
+        .atwoani:hover p {
+            transform: scale(0.95) translate3d( 0, 0, 0) perspective(1px);
+        }
+
+#sideMenu > li > a.active {
+    background-color: rgba(254,145,176,0.6) !important;
+}
+
+#appTwoContainer > .card > .card-body .card {
+    margin-right: 10px !important;
+    margin-bottom: 30px !important;
+}
+
+#tooltip {
+    position: absolute;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
+    border: 1px solid #ddd;
+    font-size: .8rem;
+    font-weight: 600;
+    padding: 2px 8px;
+}
