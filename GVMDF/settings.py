@@ -57,9 +57,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-#CORS_ORIGIN_WHITELIST = [
-#    'http://:localhost:57257',
-#]
 
 ROOT_URLCONF = 'GVMDF.urls'
 
@@ -84,12 +81,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'GVMDF.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
+#You can use other mutation profile database by change this settings
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'GVMDF',
-        'USER': 'upload',
-        'PASSWORD': '4522be143A6000O0',
+        'USER': 'guest',
+        'PASSWORD': '123456',
         'HOST' : '43.139.53.21',
         'PORT' : '3306',
     }

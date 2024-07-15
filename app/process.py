@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 sys.path.append(os.path.join(os.getcwd(), 'data'))
 
 from Bio import SeqIO
@@ -63,6 +64,13 @@ def sample_insertion(meta, species):
     check_lineage(mt['lineage'], species)
     mt['country'] = mt['country'].str.replace('Taiwan', 'China(Taiwan)')
     mt['country'] = mt['country'].str.replace('Hong Kong', 'China(Hong Kong)')
+    mt['country'] = mt['country'].str.replace('Macau', 'China(Macau)')
+    mt['country'] = mt['country'].str.replace('Viet Nam', 'Vietnam')
+    mt['country'] = mt['country'].str.replace('USSR', 'Russia')
+    mt['country'] = mt['country'].str.replace('Korea', 'South Korea')
+    mt['country'] = mt['country'].str.replace('South South Korea', 'South Korea')
+    mt['lineage'] = mt['lineage'].str.replace('Mixed', 'mixed')
+    mt['lineage'] = mt['lineage'].str.replace('n1', 'N1')
 
     cdict = {}
     ldict = {}
@@ -107,15 +115,32 @@ def data_insertion(species, dataframe):
     for i in dbs.Sample.objects.filter(id__in = df['sample'].tolist()):
         sample_index[i.id] = i
 
+    count = 0
     for j in df.index:
-        pos_list.append(dbs.Position(rpos = df['refpos'][j], rvar = df['refvar'][j], qpos = df['qpos'][j], qvar = df['qvar'][j], sample = sample_index[df['sample'][j]], protein = protein_index[df['protein'][j]]))
-    dbs.Position.objects.bulk_create(pos_list)
-    print("p_inserted")
-
-    for k in df.index:
         pkv = pkv + 1
-        ex_list.append(dbs.Extra(M_type = df['M_type'][k], PM_type = df['PM_type'][k], pro_variant = df['pro_variant'][k], variant = df['variant'][k], varclass = dbs.Extra.Varclass[df['varclass'][k]], position_id = pkv))
+        pos_list.append(dbs.Position(id = pkv, rpos = df['refpos'][j], rvar = df['refvar'][j], qpos = df['qpos'][j], qvar = df['qvar'][j], sample = sample_index[df['sample'][j]], protein = protein_index[df['protein'][j]]))
+        ex_list.append(dbs.Extra(id = pkv, M_type = df['M_type'][j], PM_type = df['PM_type'][j], pro_variant = df['pro_variant'][j], variant = df['variant'][j], varclass = dbs.Extra.Varclass[df['varclass'][j]], position_id = pkv))
+        count = count + 1
+        if(count % 100000 == 0):
+            s = time.time()
+            dbs.Position.objects.bulk_create(pos_list)
+            e = time.time()
+            print(e-s)
+            s = time.time()
+            dbs.Extra.objects.bulk_create(ex_list)
+            e = time.time()
+            print(e-s)
+            pos_list = []
+            ex_list = []
+            print(count / total)
+    s = time.time()
+    dbs.Position.objects.bulk_create(pos_list)
+    e = time.time()
+    print(e-s)
+    s = time.time()
     dbs.Extra.objects.bulk_create(ex_list)
+    e = time.time()
+    print(e-s)
     print("e_inserted")
 
 def data_entry(species):
@@ -165,7 +190,6 @@ def data_entry(species):
             output.append(pd.read_csv(outputfd))
             os.remove(outputfd)
         opt = pd.concat(output, ignore_index = True)
-        #opt.to_csv('opt.csv')
     else:
         raw_data_handler(raw = raws, ref = os.path.join(datadir, s.refseq), gff = os.path.join(datadir, s.annotation))
         opt = pd.read_csv(outputfd)
