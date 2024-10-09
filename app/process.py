@@ -122,26 +122,14 @@ def data_insertion(species, dataframe):
         ex_list.append(dbs.Extra(id = pkv, M_type = df['M_type'][j], PM_type = df['PM_type'][j], pro_variant = df['pro_variant'][j], variant = df['variant'][j], varclass = dbs.Extra.Varclass[df['varclass'][j]], position_id = pkv))
         count = count + 1
         if(count % 100000 == 0):
-            s = time.time()
             dbs.Position.objects.bulk_create(pos_list)
-            e = time.time()
-            print(e-s)
-            s = time.time()
             dbs.Extra.objects.bulk_create(ex_list)
-            e = time.time()
-            print(e-s)
             pos_list = []
             ex_list = []
             print(count / total)
-    s = time.time()
     dbs.Position.objects.bulk_create(pos_list)
-    e = time.time()
-    print(e-s)
-    s = time.time()
     dbs.Extra.objects.bulk_create(ex_list)
-    e = time.time()
-    print(e-s)
-    print("e_inserted")
+    print("inserted")
 
 def data_entry(species):
     s = dbs.Species.objects.get(species = species)
